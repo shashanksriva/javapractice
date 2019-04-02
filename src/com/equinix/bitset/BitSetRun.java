@@ -1,8 +1,6 @@
 package com.equinix.bitset;
 
-import java.nio.ByteBuffer;
 import java.util.List;
-import javax.activation.DataHandler;
 
 /**
  * Class to test BitSet implementation of interface handling

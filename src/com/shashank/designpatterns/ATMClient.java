@@ -2,37 +2,38 @@ package com.shashank.designpatterns;
 
 import java.util.Scanner;
 
-public class ATMChainOfResponsibility {
+public class ATMClient {
 
-    private DispenserLink chain1;
+    private DispenserLinkI chain1;
 
-    public ATMChainOfResponsibility() {
+    public ATMClient() {
         // Initialise the chain
         chain1 = new Rs2000Dispenser();
-        DispenserLink chain2 = new Rs500Dispenser();
-        DispenserLink chain3 = new Rs200Dispenser();
-        DispenserLink chain4 = new Rs100Dispenser();
+        DispenserLinkI chain2 = new Rs500Dispenser();
+        DispenserLinkI chain3 = new Rs200Dispenser();
+        DispenserLinkI chain4 = new Rs100Dispenser();
 
-        // Set links of responsibility chain
+        // Set links for Chain of Responsibility
         chain1.setNextDispenserHandler(chain2);
         chain2.setNextDispenserHandler(chain3);
         chain3.setNextDispenserHandler(chain4);
     }
 
     public static void main(String[] args) throws Exception{
-        ATMChainOfResponsibility atmDispenser = new ATMChainOfResponsibility();
-        
-        int amount = 0;
+        ATMClient atmDispenserClient = new ATMClient();
+        sendRequestToChains(atmDispenserClient);
+    }
+    
+    private static void sendRequestToChains(ATMClient atmDispenser) {
         System.out.println("Enter amount to dispense");
         Scanner input = new Scanner(System.in);
-        amount = input.nextInt();
-        if (amount % 100 != 0) {
+        Rupees amount = new Rupees(input.nextInt());
+        if (amount.getAmount() % 100 != 0) {
             System.out.println("Amount should be in multiple of 100s.");
         }
         input.close();
-        // process the request
-        atmDispenser.chain1.dispenseHandler(new Rupees(amount));
-
+        // process the request by sending the request to first chain
+        atmDispenser.chain1.dispenseHandler(amount);
     }
 }
 
@@ -50,22 +51,21 @@ final class Rupees {
     }
 }
 
-interface DispenserLink {
+interface DispenserLinkI {
     
-    void setNextDispenserHandler(DispenserLink dispLink);
+    void setNextDispenserHandler(DispenserLinkI dispLink);
     
     void dispenseHandler(Rupees rs);
 }
 
 
-class Rs2000Dispenser implements DispenserLink {
+class Rs2000Dispenser implements DispenserLinkI {
     
-
-    private DispenserLink link;
+    private DispenserLinkI link;
     private final int denomination = 2000;
 
     @Override
-    public void setNextDispenserHandler(DispenserLink dispLink) {
+    public void setNextDispenserHandler(DispenserLinkI dispLink) {
         this.link = dispLink;
     }
 
@@ -83,13 +83,13 @@ class Rs2000Dispenser implements DispenserLink {
     
 }
 
-class Rs500Dispenser implements DispenserLink {
+class Rs500Dispenser implements DispenserLinkI {
 
-    private DispenserLink link;
+    private DispenserLinkI link;
     private final int denomination = 500;
 
     @Override
-    public void setNextDispenserHandler(DispenserLink dispLink) {
+    public void setNextDispenserHandler(DispenserLinkI dispLink) {
         this.link = dispLink;
     }
 
@@ -107,14 +107,14 @@ class Rs500Dispenser implements DispenserLink {
     
 }
 
-class Rs200Dispenser implements DispenserLink {
+class Rs200Dispenser implements DispenserLinkI {
 
-    private DispenserLink link;
+    private DispenserLinkI link;
     private final int denomination = 200;
     
 
     @Override
-    public void setNextDispenserHandler(DispenserLink dispLink) {
+    public void setNextDispenserHandler(DispenserLinkI dispLink) {
         this.link = dispLink;
     }
 
@@ -132,13 +132,13 @@ class Rs200Dispenser implements DispenserLink {
     
 }
 
-class Rs100Dispenser implements DispenserLink {
+class Rs100Dispenser implements DispenserLinkI {
 
     private final int denomination = 100;
-    private DispenserLink link;
+    private DispenserLinkI link;
 
     @Override
-    public void setNextDispenserHandler(DispenserLink dispLink) {
+    public void setNextDispenserHandler(DispenserLinkI dispLink) {
         this.link = dispLink;
     }
 
