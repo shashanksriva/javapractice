@@ -64,7 +64,7 @@ abstract class Toppings implements PizzaI {
 
 class FreshTomato extends Toppings {
 
-    private PizzaI pizza;
+    private final PizzaI pizza;
 
     public FreshTomato(PizzaI pizza) {
         super(pizza);
@@ -85,7 +85,7 @@ class FreshTomato extends Toppings {
 
 class OnionRings extends Toppings {
 
-    private PizzaI pizza;
+    private final PizzaI pizza;
 
     public OnionRings(PizzaI pizza) {
         super(pizza);
@@ -105,7 +105,7 @@ class OnionRings extends Toppings {
 
 class FreshCorns extends Toppings {
     
-    private PizzaI pizza;
+    private final PizzaI pizza;
 
     public FreshCorns(PizzaI pizza) {
         super(pizza);

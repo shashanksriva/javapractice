@@ -50,9 +50,7 @@ public class EmployeeInfo {
     }
 
     public boolean employeeInfoValidator() {
-        boolean isValid = true;
-        if(StringUtils.isBlank(EmployeeName)) 
-            isValid = false;
+        boolean isValid = !StringUtils.isBlank(EmployeeName);
         if(StringUtils.isBlank(designation))
             isValid =false;
         if((age==0 || age < 18 || age > 60) || (salary == 0) || (EmployeeId == 0))

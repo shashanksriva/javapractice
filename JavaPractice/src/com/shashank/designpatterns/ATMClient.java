@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ATMClient {
 
-    private DispenserLinkI chain1;
+    private final DispenserLinkI chain1;
 
     public ATMClient() {
         // Initialise the chain
@@ -40,7 +40,7 @@ public class ATMClient {
 
 final class Rupees {
     
-    private int amount;
+    private final int amount;
 
     public Rupees(int amount) {
         this.amount = amount;
@@ -58,8 +58,18 @@ interface DispenserLinkI {
     void dispenseHandler(Rupees rs);
 }
 
+abstract class BaseDispenser {
 
-class Rs2000Dispenser implements DispenserLinkI {
+    public void dispense(DispenserLinkI link, Rupees rs, int denomination) {
+        int num = rs.getAmount()/denomination;
+        int remainder = rs.getAmount() % denomination;
+        System.out.println("Dispensing "+num+ " " + denomination + " note");
+        if(remainder !=0) link.dispenseHandler(new Rupees(remainder));
+    }
+}
+
+
+class Rs2000Dispenser extends BaseDispenser implements DispenserLinkI {
     
     private DispenserLinkI link;
     private final int denomination = 2000;
@@ -72,10 +82,7 @@ class Rs2000Dispenser implements DispenserLinkI {
     @Override
     public void dispenseHandler(Rupees rs) {
         if(rs.getAmount() >= denomination){
-            int num = rs.getAmount()/denomination;
-            int remainder = rs.getAmount() % denomination;
-            System.out.println("Dispensing "+num+ " " + denomination + "note");
-            if(remainder !=0) this.link.dispenseHandler(new Rupees(remainder));
+            dispense(this.link, rs, denomination);
         }else{
             this.link.dispenseHandler(rs);
         }
@@ -98,7 +105,7 @@ class Rs500Dispenser implements DispenserLinkI {
         if(rs.getAmount() >= denomination){
             int num = rs.getAmount()/denomination;
             int remainder = rs.getAmount() % denomination;
-            System.out.println("Dispensing "+num+ " " + denomination + "note");
+            System.out.println("Dispensing "+num+ " " + denomination + " note");
             if(remainder !=0) this.link.dispenseHandler(new Rupees(remainder));
         }else{
             this.link.dispenseHandler(rs);
